@@ -18,20 +18,56 @@ public class PizzaInfoController{
         _ingredientPopularity = new Dictionary<string, int>();
     }
 
-    public void GetToppingData(string topping1){
+    public void GetDepartmentWithFavoriteTopping(string topping){
+        var departmentCounts = new Dictionary<string, int>();
+
+        foreach(var entry in _pizzaInfoList){
+            if (entry.Toppings.Any(t => string.Equals(t, topping, StringComparison.OrdinalIgnoreCase))){
+                if (departmentCounts.ContainsKey(entry.Department.ToLower())){
+                    departmentCounts[entry.Department.ToLower()] += 1;
+                    continue;
+                }
+                departmentCounts[entry.Department] = 1;
+            }
+        }
+
+        string department = departmentCounts.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
+        Console.WriteLine($"The department with favorite topping {topping} is {department}");
+    }
+
+    public void GetDepartmentWithFavoriteToppingPair(string topping1, string topping2){
+        var departmentCounts = new Dictionary<string, int>();
+
+        foreach(var entry in _pizzaInfoList){
+            if (entry.Toppings.Contains("pepperoni", StringComparer.OrdinalIgnoreCase) &&
+            entry.Toppings.Contains("onions", StringComparer.OrdinalIgnoreCase))
+            {
+                if (departmentCounts.ContainsKey(entry.Department.ToLower())){
+                    Console.WriteLine("has both toppings");
+                    departmentCounts[entry.Department.ToLower()] += 1;
+                    continue;
+                }
+                departmentCounts[entry.Department] = 1;
+            }
+        }
+
+        string department = departmentCounts.OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
+        Console.WriteLine($"The department with favorite topping pair {topping1} and {topping2} is {department}");
+    }
+
+    public void GetToppingData(string topping){
         if (_pizzaInfoList == null) { return; }
-        topping1 = topping1.ToLower();
+        topping = topping.ToLower();
 
         IEnumerable<IPizzaInfo> results;
 
         results = _pizzaInfoList
             .Where(entry => 
                 entry.Toppings
-                .Any(topping => string.Equals(topping, topping1, StringComparison.OrdinalIgnoreCase))
+                .Any(t => string.Equals(t, topping, StringComparison.OrdinalIgnoreCase))
             );
-        Console.WriteLine($"Favorite topping is {topping1}: {results.Count()}");
+        Console.WriteLine($"Favorite topping is {topping}: {results.Count()}");
     }
-
 
     public void GetToppingPairData(string topping1, string topping2){
         if (_pizzaInfoList == null) { return; }
