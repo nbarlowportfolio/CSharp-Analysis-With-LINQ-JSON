@@ -46,6 +46,3 @@ For department Engineering:
 How many people like the most popular combination?: 10, Combination: Cheese, Bacon
 For department Research and Development:
 How many people like the most popular combination?: 12, Combination: Mushrooms, Sausage
-
-Disclaimer: I ran out of time and could not test answers.
-Disclaimer: All pizza ingredients listed are plant-based. No animals were harmed in the coding of this program.
