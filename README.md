@@ -1,4 +1,4 @@
-Using a 2000 record JSON dataset, I was asked to write a C# console application.
+As per pre-interview screening, I was asked to write a C# console application.
 
 The code demonstrates concepts such as **LINQ**, **MVC**, **OOP**, and **defensive programming**.
 
