@@ -1,12 +1,16 @@
-Using a 2000 record JSON dataset, I was asked to write a C# console application. The code demonstrates concepts such as LINQ, LINQ, MVC, OOP, defensive programming, and SOLID coding principes. 
+Using a 2000 record JSON dataset, I was asked to write a C# console application.
 
-To run, clone the repository, enter the root folder, and use the 'dotnet run' command.
-Result:
+The code demonstrates concepts such as **LINQ**, **MVC**, **OOP**, and **defensive programming**.
 
-Favorite topping is pineapple: 467
-Favorite topping is pepperoni: 486
-Favorite topping is onions: 527
-Favorite topping is both pepperoni and onions: 78
+<p align="center">
+<img width='30%' src='https://github.com/nbarlowportfolio/CSharp-Analysis-With-LINQ-JSON/assets/156025438/d2f70a55-31de-433f-b1d0-473f209ad55e'>
+  <br>
+Scenario: Getting statistics of employee food preferences.
+</p>
+
+_To run, clone the repository, enter the root folder, and use the 'dotnet run' command.
+Result:_
+
 Hello, MercuryWorks! Thanks for reaching out. I hope this code finds you well. Please let me know if you have any questions.
 
 Q1:
