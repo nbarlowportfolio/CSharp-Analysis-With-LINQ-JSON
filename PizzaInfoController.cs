@@ -7,6 +7,9 @@ using System.Linq;
 
 namespace mercuryworks.jobscreening{
 
+/// <summary>
+/// A controller that displays employee food statistics.
+/// </summary>
 public class PizzaInfoController{
     List<PizzaInfo>? _pizzaInfoList;
     Dictionary<string, int>? _ingredientPopularity;
@@ -18,6 +21,9 @@ public class PizzaInfoController{
         _ingredientPopularity = new Dictionary<string, int>();
     }
 
+    /// <summary>
+    /// Prints the department that has the specified favorite topping.
+    /// </summary>
     public void GetDepartmentWithFavoriteTopping(string topping){
         var departmentCounts = new Dictionary<string, int>();
 
@@ -35,12 +41,15 @@ public class PizzaInfoController{
         Console.WriteLine($"The department with favorite topping {topping} is {department}");
     }
 
+    /// <summary>
+    /// Prints the department that has the specified favorite 2 topping combo.
+    /// </summary>
     public void GetDepartmentWithFavoriteToppingPair(string topping1, string topping2){
         var departmentCounts = new Dictionary<string, int>();
 
         foreach(var entry in _pizzaInfoList){
-            if (entry.Toppings.Contains("pepperoni", StringComparer.OrdinalIgnoreCase) &&
-            entry.Toppings.Contains("onions", StringComparer.OrdinalIgnoreCase))
+            if (entry.Toppings.Contains(topping1, StringComparer.OrdinalIgnoreCase) &&
+            entry.Toppings.Contains(topping2, StringComparer.OrdinalIgnoreCase))
             {
                 if (departmentCounts.ContainsKey(entry.Department.ToLower())){
                     Console.WriteLine("has both toppings");
@@ -55,6 +64,9 @@ public class PizzaInfoController{
         Console.WriteLine($"The department with favorite topping pair {topping1} and {topping2} is {department}");
     }
 
+    /// <summary>
+    /// Prints the count of the specified favorite topping in the entire company.
+    /// </summary>
     public void GetToppingData(string topping){
         if (_pizzaInfoList == null) { return; }
         topping = topping.ToLower();
@@ -69,6 +81,9 @@ public class PizzaInfoController{
         Console.WriteLine($"Favorite topping is {topping}: {results.Count()}");
     }
 
+    /// <summary>
+    /// Prints the count of the specified favorite topping pair in the entire company.
+    /// </summary>
     public void GetToppingPairData(string topping1, string topping2){
         if (_pizzaInfoList == null) { return; }
         topping1 = topping1.ToLower();
@@ -83,6 +98,9 @@ public class PizzaInfoController{
         Console.WriteLine($"Favorite topping is both {topping1} and {topping2}: {results.Count()}");
     }
 
+    /// <summary>
+    /// Prints the count of pizzas required for the specified department.
+    /// </summary>
     public void GetPizzasNeededForDepartment(string department){
         int totalEntries = _pizzaInfoList.Count();
 
@@ -98,6 +116,9 @@ public class PizzaInfoController{
         Console.WriteLine($"Pizzas needed for department {department}: {Math.Ceiling(((float)(results.Count())) / 4.0f)}");
     }
 
+    /// <summary>
+    /// Prints the most popular topping combo for each department.
+    /// </summary>
     public void GetPopularCombinationsForAllDepartments(){
         
         if (_pizzaInfoList == null) { return; }
@@ -135,19 +156,35 @@ public class PizzaInfoController{
         }
     }
 
+    /// <summary>
+    /// For one entry of info, return all its topping combinations.
+    /// </summary>
     private static List<Tuple<string, string>> getToppingCombinationsFromEntry(IPizzaInfo? entry){
         var result = new List<Tuple<string, string>> ();
         foreach (var topping in entry?.Toppings){
             foreach (var topping_b in entry?.Toppings){
                 if (topping.ToLower() == topping_b.ToLower())
                     continue;
-                Tuple<string, string> pair = new Tuple<string, string>(topping, topping_b);
+
+                // Avoid duplicates that mirror
+                // Ex: (A, B), (B, A).
+                // We only take (A, B) because (B, A) is the same.
+                Tuple<string, string> pair;
+                if (String.Compare(topping, topping_b, StringComparison.Ordinal) > 0){
+                    pair = new Tuple<string, string>(topping_b, topping);
+                    result.Add(pair);
+                    continue;
+                }
+                pair = new Tuple<string, string>(topping, topping_b);
                 result.Add(pair);
             }
         }
         return result;
     }
 
+    /// <Summary>
+    /// Answers query: Which pizza topping combination is the most popular in each department and how many employees prefer it?
+    /// </Summary>
     private Dictionary<Tuple<string, string>, int> ProcessDepartmentEntries(List<PizzaInfo> departmentEntries)
     {
         var toppingCombinationCounts = new Dictionary<Tuple<string, string>, int>();
@@ -168,7 +205,6 @@ public class PizzaInfoController{
                             toppingCombinationCounts[combo] = count + 1;
                         }
                     }
-                    
                     break;
 
                 default:
