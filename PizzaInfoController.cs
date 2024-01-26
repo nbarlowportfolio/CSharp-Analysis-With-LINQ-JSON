@@ -12,21 +12,17 @@ namespace mercuryworks.jobscreening;
 /// </summary>
 public class PizzaInfoController{
 
-    List<PizzaInfo>? _pizzaInfoList;
+    List<PizzaInfo> _pizzaInfoList;
 
     public PizzaInfoController(string pathToPizzaInfoJson){
         string jsonText = File.ReadAllText(pathToPizzaInfoJson);
-        List<PizzaInfo>? pizzaInfoList = JsonConvert.DeserializeObject<List<PizzaInfo>>(jsonText);
-        _pizzaInfoList = pizzaInfoList;
+        _pizzaInfoList = JsonConvert.DeserializeObject<List<PizzaInfo>>(jsonText) ?? new List<PizzaInfo>();
     }
 
     /// <summary>
     /// Prints the department that has the specified favorite topping.
     /// </summary>
     public void GetDepartmentWithFavoriteTopping(string topping){
-        if (_pizzaInfoList == null)
-            return;
-        
         var departmentCounts = new Dictionary<string, int>();
 
         foreach(var entry in _pizzaInfoList){
@@ -50,9 +46,6 @@ public class PizzaInfoController{
     /// Prints the department that has the specified favorite 2 topping combo.
     /// </summary>
     public void GetDepartmentWithFavoriteToppingPair(string topping1, string topping2){
-        if (_pizzaInfoList == null)
-            return;
-
         var departmentCounts = new Dictionary<string, int>();
 
         foreach(var entry in _pizzaInfoList){
@@ -79,9 +72,6 @@ public class PizzaInfoController{
     /// Prints the count of the specified favorite topping in the entire company.
     /// </summary>
     public void GetToppingData(string topping){
-        if (_pizzaInfoList == null)
-            return;
-
         topping = topping.ToLower();
 
         IEnumerable<IPizzaInfo> results;
@@ -99,9 +89,6 @@ public class PizzaInfoController{
     /// Prints the count of the specified favorite topping pair in the entire company.
     /// </summary>
     public void GetToppingPairData(string topping1, string topping2){
-        if (_pizzaInfoList == null) 
-            return;
-            
         topping1 = topping1.ToLower();
 
         IEnumerable<IPizzaInfo> results;
@@ -119,9 +106,6 @@ public class PizzaInfoController{
     /// Prints the count of pizzas required for the specified department.
     /// </summary>
     public void GetPizzasNeededForDepartment(string department){
-        if (_pizzaInfoList == null)
-            return;
-
         int totalEntries = _pizzaInfoList.Count();
 
         department = department.ToLower();
@@ -140,10 +124,6 @@ public class PizzaInfoController{
     /// Prints the most popular topping combo for each department.
     /// </summary>
     public void GetPopularCombinationsForAllDepartments(){
-        
-        if (_pizzaInfoList == null) 
-            return;
-
         List<string?> departments = _pizzaInfoList
             .Select(entry => 
                 entry.Department
