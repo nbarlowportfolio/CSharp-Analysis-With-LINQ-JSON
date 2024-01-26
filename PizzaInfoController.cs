@@ -183,7 +183,10 @@ public class PizzaInfoController{
     /// <summary>
     /// For one entry of info, return all its topping combinations.
     /// </summary>
-    private static List<Tuple<string, string>> getToppingCombinationsFromEntry(IPizzaInfo? entry){
+    private static List<Tuple<string, string>>? getToppingCombinationsFromEntry(IPizzaInfo? entry){
+        if (entry == null)
+            return null;
+
         var result = new List<Tuple<string, string>> ();
         foreach (var topping in entry?.Toppings){
             foreach (var topping_b in entry?.Toppings){
@@ -194,7 +197,7 @@ public class PizzaInfoController{
                 // Ex: (A, B), (B, A).
                 // We only take (A, B) because (B, A) is the same.
                 Tuple<string, string> pair;
-                if (String.Compare(topping, topping_b, StringComparison.Ordinal) > 0){
+                if (string.Compare(topping, topping_b, StringComparison.Ordinal) > 0){
                     pair = new Tuple<string, string>(topping_b, topping);
                     result.Add(pair);
                     continue;
@@ -240,25 +243,5 @@ public class PizzaInfoController{
             }
         }
         return toppingCombinationCounts;
-    }
-
-    public void PrintTestQuery()
-    {
-        if (_pizzaInfoList == null || _pizzaInfoList.Count() == 0)
-            return;
-
-        var result = from item in _pizzaInfoList
-                    where item?.Toppings?.Count() == 2
-                    select item;
-
-        var firstResult = result.FirstOrDefault();
-
-        if (firstResult != null)
-        {
-            Console.WriteLine($"{result.First().Name} {result.First().Toppings?.Count()}");
-            return;
-        }
-
-        Console.WriteLine("There aren't any records that meet the criteria.");
     }
 }

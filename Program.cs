@@ -30,6 +30,3 @@ Console.WriteLine();
 // 5 Which pizza topping combination is the most popular in each department and how many employees prefer it?
 Console.WriteLine("Q5:");
 pizzaInfoController.GetPopularCombinationsForAllDepartments();
-
-// Custom fun.
-// pizzaInfoController.PrintTestQuery();
