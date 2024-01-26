@@ -5,30 +5,35 @@ using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using System.Linq;
 
-namespace mercuryworks.jobscreening{
+namespace mercuryworks.jobscreening;
 
 /// <summary>
 /// A controller that displays employee food statistics.
 /// </summary>
 public class PizzaInfoController{
+
     List<PizzaInfo>? _pizzaInfoList;
-    Dictionary<string, int>? _ingredientPopularity;
 
     public PizzaInfoController(string pathToPizzaInfoJson){
         string jsonText = File.ReadAllText(pathToPizzaInfoJson);
         List<PizzaInfo>? pizzaInfoList = JsonConvert.DeserializeObject<List<PizzaInfo>>(jsonText);
         _pizzaInfoList = pizzaInfoList;
-        _ingredientPopularity = new Dictionary<string, int>();
     }
 
     /// <summary>
     /// Prints the department that has the specified favorite topping.
     /// </summary>
     public void GetDepartmentWithFavoriteTopping(string topping){
+        if (_pizzaInfoList == null)
+            return;
+        
         var departmentCounts = new Dictionary<string, int>();
 
         foreach(var entry in _pizzaInfoList){
-            if (entry.Toppings.Any(t => string.Equals(t, topping, StringComparison.OrdinalIgnoreCase))){
+            if (entry.Toppings != null && entry.Toppings.Any(t => string.Equals(t, topping, StringComparison.OrdinalIgnoreCase))){
+                if (entry.Department == null)
+                    continue;
+
                 if (departmentCounts.ContainsKey(entry.Department.ToLower())){
                     departmentCounts[entry.Department.ToLower()] += 1;
                     continue;
@@ -45,12 +50,18 @@ public class PizzaInfoController{
     /// Prints the department that has the specified favorite 2 topping combo.
     /// </summary>
     public void GetDepartmentWithFavoriteToppingPair(string topping1, string topping2){
+        if (_pizzaInfoList == null)
+            return;
+
         var departmentCounts = new Dictionary<string, int>();
 
         foreach(var entry in _pizzaInfoList){
-            if (entry.Toppings.Contains(topping1, StringComparer.OrdinalIgnoreCase) &&
+            if (entry.Toppings != null && entry.Toppings.Contains(topping1, StringComparer.OrdinalIgnoreCase) &&
             entry.Toppings.Contains(topping2, StringComparer.OrdinalIgnoreCase))
             {
+                if (entry.Department == null)
+                    continue;
+
                 if (departmentCounts.ContainsKey(entry.Department.ToLower())){
                     Console.WriteLine("has both toppings");
                     departmentCounts[entry.Department.ToLower()] += 1;
@@ -68,13 +79,16 @@ public class PizzaInfoController{
     /// Prints the count of the specified favorite topping in the entire company.
     /// </summary>
     public void GetToppingData(string topping){
-        if (_pizzaInfoList == null) { return; }
+        if (_pizzaInfoList == null)
+            return;
+
         topping = topping.ToLower();
 
         IEnumerable<IPizzaInfo> results;
 
         results = _pizzaInfoList
             .Where(entry => 
+                entry.Toppings != null &&
                 entry.Toppings
                 .Any(t => string.Equals(t, topping, StringComparison.OrdinalIgnoreCase))
             );
@@ -85,13 +99,16 @@ public class PizzaInfoController{
     /// Prints the count of the specified favorite topping pair in the entire company.
     /// </summary>
     public void GetToppingPairData(string topping1, string topping2){
-        if (_pizzaInfoList == null) { return; }
+        if (_pizzaInfoList == null) 
+            return;
+            
         topping1 = topping1.ToLower();
 
         IEnumerable<IPizzaInfo> results;
 
         results = _pizzaInfoList
             .Where(entry => 
+                    entry.Toppings != null &&
                     entry.Toppings.Contains(topping1, StringComparer.OrdinalIgnoreCase) &&
                     entry.Toppings.Contains(topping2, StringComparer.OrdinalIgnoreCase));
 
@@ -102,9 +119,11 @@ public class PizzaInfoController{
     /// Prints the count of pizzas required for the specified department.
     /// </summary>
     public void GetPizzasNeededForDepartment(string department){
+        if (_pizzaInfoList == null)
+            return;
+
         int totalEntries = _pizzaInfoList.Count();
 
-        if (_pizzaInfoList == null) { return; }
         department = department.ToLower();
 
         IEnumerable<IPizzaInfo> results;
@@ -113,6 +132,7 @@ public class PizzaInfoController{
             .Where(entry => 
                 string.Equals(entry.Department?.ToLower(), department, StringComparison.OrdinalIgnoreCase)
             );
+
         Console.WriteLine($"Pizzas needed for department {department}: {Math.Ceiling(((float)(results.Count())) / 4.0f)}");
     }
 
@@ -121,11 +141,10 @@ public class PizzaInfoController{
     /// </summary>
     public void GetPopularCombinationsForAllDepartments(){
         
-        if (_pizzaInfoList == null) { return; }
+        if (_pizzaInfoList == null) 
+            return;
 
-        IEnumerable<IPizzaInfo> results;
-
-        List<string> departments = _pizzaInfoList
+        List<string?> departments = _pizzaInfoList
             .Select(entry => 
                 entry.Department
             )
@@ -134,8 +153,13 @@ public class PizzaInfoController{
 
         foreach (var department in departments)
         {
+            if (department == null)
+                continue;
+
             List<PizzaInfo> departmentEntries = _pizzaInfoList
-                .Where(entry => entry.Department.ToLower() == department.ToLower())
+                .Where(entry => 
+                    entry.Department != null && 
+                    entry.Department.ToLower() == department.ToLower())
                 .ToList();
             
             Dictionary<Tuple<string, string>, int> toppingCombinationCounts = 
@@ -190,7 +214,10 @@ public class PizzaInfoController{
         var toppingCombinationCounts = new Dictionary<Tuple<string, string>, int>();
         foreach (var entry in departmentEntries)
         {
-            switch (entry.Toppings.Count())
+            if (entry.Toppings == null)
+                continue;
+
+            switch (entry.Toppings?.Count)
             {
                 case 2:
                     var combos = getToppingCombinationsFromEntry(entry);
@@ -214,5 +241,24 @@ public class PizzaInfoController{
         }
         return toppingCombinationCounts;
     }
-}
+
+    public void PrintTestQuery()
+    {
+        if (_pizzaInfoList == null || _pizzaInfoList.Count() == 0)
+            return;
+
+        var result = from item in _pizzaInfoList
+                    where item?.Toppings?.Count() == 2
+                    select item;
+
+        var firstResult = result.FirstOrDefault();
+
+        if (firstResult != null)
+        {
+            Console.WriteLine($"{result.First().Name} {result.First().Toppings?.Count()}");
+            return;
+        }
+
+        Console.WriteLine("There aren't any records that meet the criteria.");
+    }
 }

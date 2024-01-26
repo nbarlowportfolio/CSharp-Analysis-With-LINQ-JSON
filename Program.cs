@@ -1,16 +1,18 @@
-﻿using mercuryworks.jobscreening;
+﻿
+using mercuryworks.jobscreening;
 
-Console.WriteLine("Hello, MercuryWorks! Thanks for reaching out. I hope this code finds you well. Please let me know if you have any questions.");
 var jsonPath = "mercuryworks-pizza-test-data.json";
 PizzaInfoController pizzaInfoController = new PizzaInfoController(jsonPath);
 Console.WriteLine();
+
+Console.WriteLine("Hello, MercuryWorks! Thanks for reaching out. I hope this code finds you well. Please let me know if you have any questions.\n");
 
 // 1 "Which department has the largest number of employees who like Pineapple on their pizzas?"
 Console.WriteLine("Q1:");
 pizzaInfoController.GetDepartmentWithFavoriteTopping("pineapple");
 Console.WriteLine();
 
-// 2 "Which department prefers Peperoni and Onions?"
+// 2 "Which department prefers Pepperoni and Onions?"
 Console.WriteLine("Q2:");
 pizzaInfoController.GetDepartmentWithFavoriteToppingPair("pepperoni", "onions");
 Console.WriteLine();
@@ -28,3 +30,6 @@ Console.WriteLine();
 // 5 Which pizza topping combination is the most popular in each department and how many employees prefer it?
 Console.WriteLine("Q5:");
 pizzaInfoController.GetPopularCombinationsForAllDepartments();
+
+// Custom fun.
+// pizzaInfoController.PrintTestQuery();
