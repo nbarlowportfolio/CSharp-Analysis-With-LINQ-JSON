@@ -1,6 +1,6 @@
-As per pre-interview screening, I was asked to write a C# console application that answered questions about employee food preferences.
+As per pre-interview screening, I was asked to write a C# console application that answered questions about employee food preferences outlined in instructions.md.
 
-The code demonstrates concepts such as **LINQ**, **MVC**, **OOP**, and **defensive programming**.
+The code demonstrates concepts such as **LINQ**, **OOP**, and **defensive programming**.
 
 _To run, clone the repository, enter the root folder, and use the 'dotnet run' command.
 Result:_
