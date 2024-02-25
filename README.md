@@ -2,12 +2,6 @@ As per pre-interview screening, I was asked to write a C# console application.
 
 The code demonstrates concepts such as **LINQ**, **MVC**, **OOP**, and **defensive programming**.
 
-<p align="center">
-<img width='30%' src='https://github.com/nbarlowportfolio/CSharp-Analysis-With-LINQ-JSON/assets/156025438/d2f70a55-31de-433f-b1d0-473f209ad55e'>
-  <br>
-Scenario: Getting statistics of employee food preferences.
-</p>
-
 _To run, clone the repository, enter the root folder, and use the 'dotnet run' command.
 Result:_
 
