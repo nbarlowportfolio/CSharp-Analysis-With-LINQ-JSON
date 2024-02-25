@@ -1,4 +1,4 @@
-As per pre-interview screening, I was asked to write a C# console application.
+As per pre-interview screening, I was asked to write a C# console application that answered questions about employee food preferences.
 
 The code demonstrates concepts such as **LINQ**, **MVC**, **OOP**, and **defensive programming**.
 
