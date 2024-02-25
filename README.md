@@ -7,17 +7,13 @@ Result:_
 
 Hello, MercuryWorks! Thanks for reaching out. I hope this code finds you well. Please let me know if you have any questions.
 
-Q1:
-The department with favorite topping pineapple is Accounting
+Q1: The department with favorite topping pineapple is Accounting
 
-Q2:
-The department with favorite topping pair pepperoni and onions is Product Management
+Q2: The department with favorite topping pair pepperoni and onions is Product Management
 
-Q3:
-Favorite topping is anchovies: 502
+Q3: Favorite topping is anchovies: 502
 
-Q4:
-Pizzas needed for department engineering: 41
+Q4: Pizzas needed for department engineering: 41
 
 Q5:
 
